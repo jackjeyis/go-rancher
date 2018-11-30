@@ -161,7 +161,10 @@ func setupRancherBaseClient(rancherClient *RancherBaseClientImpl, opts *ClientOp
 	if opts.Timeout == 0 {
 		opts.Timeout = time.Second * 10
 	}
-	client := &http.Client{Timeout: opts.Timeout}
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+	client := &http.Client{Timeout: opts.Timeout,Transport: tr}
 	req, err := http.NewRequest("GET", opts.Url, nil)
 	if err != nil {
 		return err
